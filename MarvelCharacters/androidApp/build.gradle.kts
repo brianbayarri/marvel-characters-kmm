@@ -20,8 +20,15 @@ android {
 }
 
 dependencies {
+    val androidMaterialVersion = "1.4.0"
+    val appCompatVersion = "1.3.1"
+    val constraintLayoutVersion = "2.1.0"
+    val coroutinesVersion = "1.6.0"
+
     implementation(project(":shared"))
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("com.google.android.material:material:$androidMaterialVersion")
+    implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 }
