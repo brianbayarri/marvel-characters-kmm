@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
             kotlin.runCatching {
                 charactersService.getMarvelCharacters()
             }.onSuccess {
-                val character = it
-                tv.text = "Estado: ${character.estado} - Temp: ${character.temperatura}"
+                val character = it[0]
+                tv.text = "Nombre: ${character.name} - Descripcion: ${character.description}"
             }.onFailure {
                 tv.text = "Error: ${it.localizedMessage}"
             }

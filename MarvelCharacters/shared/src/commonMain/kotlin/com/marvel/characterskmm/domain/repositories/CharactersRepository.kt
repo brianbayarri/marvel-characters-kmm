@@ -1,6 +1,8 @@
 package com.marvel.characterskmm.domain.repositories
 
 import com.marvel.characterskmm.data.Character
+import com.marvel.characterskmm.data.CharactersResponse
+import com.marvel.characterskmm.domain.PUBLIC_KEY
 import com.marvel.characterskmm.initLogger
 import io.github.aakira.napier.Napier
 import io.ktor.client.*
@@ -34,7 +36,12 @@ class CharactersRepository {
         initLogger()
     }
 
-    suspend fun get(timestamp: Long, md5: String) : Character {
-        return httpClient.get("https://api.jsonbin.io/b/614defac4a82881d6c54cbe9").body()
+    suspend fun get(timestamp: Long, md5: String) : CharactersResponse {
+        return httpClient.get {
+            url("https://gateway.marvel.com/v1/public/characters")
+            parameter("apikey", PUBLIC_KEY)
+            parameter("ts", timestamp)
+            parameter("hash", md5)
+        }.body()
     }
 }

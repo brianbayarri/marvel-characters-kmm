@@ -26,6 +26,7 @@ kotlin {
     sourceSets {
         val ktorVersion = "2.0.0-beta-1"
         val napierVersion = "2.6.1"
+        val okioVersion = "3.1.0"
 
         val commonMain by getting {
             dependencies{
@@ -40,6 +41,9 @@ kotlin {
                 //SERIALIZATION
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+
+                //OKIO
+                implementation("com.squareup.okio:okio:$okioVersion")
             }
         }
 
