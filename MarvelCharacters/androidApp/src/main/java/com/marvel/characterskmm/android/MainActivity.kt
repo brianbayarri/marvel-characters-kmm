@@ -1,38 +1,63 @@
 package com.marvel.characterskmm.android
 
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.marvel.characterskmm.Greeting
+import android.view.View
 import android.widget.TextView
-import com.marvel.characterskmm.domain.services.CharactersService
-import kotlinx.coroutines.MainScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.marvel.characterskmm.android.databinding.ActivityMainBinding
+import com.marvel.characterskmm.android.domain.adapters.CharactersAdapter
+import com.marvel.characterskmm.android.domain.utils.VerticalSpaceItemDecoration
+import com.marvel.characterskmm.android.ui.characters.CharactersViewModel
+import com.marvel.characterskmm.android.ui.characters.CharactersViewModelFactory
+import com.marvel.characterskmm.android.ui.characters.ScreenState
 import kotlinx.coroutines.launch
-
-fun greet(): String {
-    return Greeting().greeting()
-}
+import com.marvel.characterskmm.data.Character
 
 class MainActivity : AppCompatActivity() {
 
-    private val charactersService = CharactersService()
-    private val mainScope = MainScope()
+    private lateinit var charactersAdapter: CharactersAdapter
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_main)
 
-        val tv: TextView = findViewById(R.id.text_view)
-        tv.text = "Loading..."
+        // Setup del listado
+        charactersAdapter = CharactersAdapter()
+        val verticalLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        with(binding.charactersList) {
+            this.adapter = charactersAdapter
+            this.layoutManager = verticalLayoutManager
+            this.addItemDecoration(VerticalSpaceItemDecoration(16))
+        }
 
-        mainScope.launch {
-            kotlin.runCatching {
-                charactersService.getMarvelCharacters()
-            }.onSuccess {
-                val character = it[0]
-                tv.text = "Nombre: ${character.name} - Descripcion: ${character.description}"
-            }.onFailure {
-                tv.text = "Error: ${it.localizedMessage}"
+        // Listen to marvel api results
+        val viewModel = ViewModelProvider(this, CharactersViewModelFactory())[CharactersViewModel::class.java]
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.screenState.collect {
+                    when (it) {
+                        ScreenState.Loading -> showLoading()
+                        is ScreenState.ShowCharacters -> showCharacters(it.list)
+                    }
+                }
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.imgSplash.visibility = View.VISIBLE
+    }
+
+    private fun showCharacters(list: List<Character>) {
+        binding.imgSplash.visibility = View.INVISIBLE
+        charactersAdapter.submitList(list)
     }
 }

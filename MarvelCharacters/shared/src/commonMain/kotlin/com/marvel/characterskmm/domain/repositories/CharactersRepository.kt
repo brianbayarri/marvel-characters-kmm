@@ -1,6 +1,5 @@
 package com.marvel.characterskmm.domain.repositories
 
-import com.marvel.characterskmm.data.Character
 import com.marvel.characterskmm.data.CharactersResponse
 import com.marvel.characterskmm.domain.PUBLIC_KEY
 import com.marvel.characterskmm.initLogger
@@ -11,12 +10,11 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 class CharactersRepository {
 
-    val httpClient = HttpClient {
+    private val httpClient = HttpClient {
         install(Logging) {
             level = LogLevel.ALL
             logger = object : Logger {
