@@ -28,7 +28,7 @@ class CharactersViewModel(
             }.onSuccess {
                 _screenState.value = ScreenState.ShowCharacters(it)
             }.onFailure {
-
+                _screenState.value = ScreenState.Error
             }
         }
     }
@@ -38,6 +38,8 @@ class CharactersViewModel(
 sealed class ScreenState {
 
     object Loading : ScreenState()
+
+    object Error : ScreenState()
 
     class ShowCharacters(val list: List<Character>) : ScreenState()
 }

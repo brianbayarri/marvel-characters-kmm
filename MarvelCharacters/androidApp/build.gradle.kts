@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("kapt")
 }
 
 android {
@@ -31,6 +34,8 @@ dependencies {
     val picassoVersion = "2.71828"
     val lifecycleVersion = "2.4.0-alpha03"
     val droidsonroidsVersion = "1.2.23"
+    val recyclerViewVersion = "1.2.1"
+    val coreKtxVersion = "1.6.0"
 
     implementation(project(":shared"))
 
@@ -38,6 +43,7 @@ dependencies {
     implementation("com.google.android.material:material:$androidMaterialVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
     implementation("androidx.constraintlayout:constraintlayout:$constraintLayoutVersion")
+    implementation("androidx.core:core-ktx:$coreKtxVersion")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
@@ -49,7 +55,11 @@ dependencies {
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
 
     // Droidsonroids
     implementation("pl.droidsonroids.gif:android-gif-drawable:$droidsonroidsVersion")
+
+    // Recycler view
+    implementation("androidx.recyclerview:recyclerview:$recyclerViewVersion")
 }

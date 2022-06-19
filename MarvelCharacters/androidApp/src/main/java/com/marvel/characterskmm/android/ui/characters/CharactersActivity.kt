@@ -1,33 +1,31 @@
-package com.marvel.characterskmm.android
+package com.marvel.characterskmm.android.ui.characters
 
-import android.opengl.Visibility
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.marvel.characterskmm.android.databinding.ActivityMainBinding
+import com.marvel.characterskmm.android.R
+import com.marvel.characterskmm.android.databinding.ActivityCharactersBinding
 import com.marvel.characterskmm.android.domain.adapters.CharactersAdapter
 import com.marvel.characterskmm.android.domain.utils.VerticalSpaceItemDecoration
-import com.marvel.characterskmm.android.ui.characters.CharactersViewModel
-import com.marvel.characterskmm.android.ui.characters.CharactersViewModelFactory
-import com.marvel.characterskmm.android.ui.characters.ScreenState
-import kotlinx.coroutines.launch
+import com.marvel.characterskmm.android.ui.error.ErrorActivity
 import com.marvel.characterskmm.data.Character
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class CharactersActivity : AppCompatActivity() {
 
     private lateinit var charactersAdapter: CharactersAdapter
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityCharactersBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_main)
+        binding = ActivityCharactersBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Setup del listado
         charactersAdapter = CharactersAdapter()
@@ -45,11 +43,17 @@ class MainActivity : AppCompatActivity() {
                 viewModel.screenState.collect {
                     when (it) {
                         ScreenState.Loading -> showLoading()
+                        ScreenState.Error -> showErrorScreen()
                         is ScreenState.ShowCharacters -> showCharacters(it.list)
                     }
                 }
             }
         }
+    }
+
+    private fun showErrorScreen() {
+        val errorActivityIntent = Intent(this, ErrorActivity::class.java)
+        startActivity(errorActivityIntent)
     }
 
     private fun showLoading() {
