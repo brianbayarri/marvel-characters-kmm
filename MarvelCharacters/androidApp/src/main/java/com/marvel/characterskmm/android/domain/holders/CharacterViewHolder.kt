@@ -10,6 +10,7 @@ class CharacterViewHolder(private val binding: ListItemCharacterBinding) : Recyc
     fun bind(character: Character) {
         binding.name.text = character.name
         binding.description.text = character.description
+
         if (character.thumbnailUrl.isNotEmpty()) {
             Picasso.get()
                 .load(character.thumbnailUrl)

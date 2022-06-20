@@ -55,17 +55,6 @@ class CharactersActivity : AppCompatActivity() {
         }
     }
 
-    private fun handlerError() {
-        val characters = cacheService.get()
-
-        if (characters.isEmpty()) {
-            showErrorScreen()
-        } else {
-            showCharacters(characters)
-        }
-
-    }
-
     private fun showErrorScreen() {
         val errorActivityIntent = Intent(this, ErrorActivity::class.java)
         startActivity(errorActivityIntent)
@@ -80,4 +69,16 @@ class CharactersActivity : AppCompatActivity() {
         charactersAdapter.submitList(list)
         cacheService.populate(list)
     }
+
+    private fun handlerError() {
+        val characters = cacheService.get()
+
+        if (characters.isEmpty()) {
+            showErrorScreen()
+        } else {
+            showCharacters(characters)
+        }
+
+    }
+
 }

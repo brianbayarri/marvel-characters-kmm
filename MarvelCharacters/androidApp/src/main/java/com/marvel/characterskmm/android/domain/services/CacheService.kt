@@ -11,7 +11,6 @@ class CacheService(context: Context) {
     var database: AppDatabase = AppDatabase(DatabaseDriverFactory(context).createDriver())
 
     fun populate(characters: List<Character>) {
-
         database.charactersQueries.transaction {
             afterCommit { Log.d("Cache population", "${characters.size} characters were inserted.") }
 
