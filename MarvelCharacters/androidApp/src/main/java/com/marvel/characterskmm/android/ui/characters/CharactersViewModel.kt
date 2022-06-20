@@ -3,6 +3,8 @@ package com.marvel.characterskmm.android.ui.characters
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.characters.cache.db.AppDatabase
+import com.marvel.characterskmm.DatabaseDriverFactory
 import com.marvel.characterskmm.domain.services.CharactersService
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.Flow

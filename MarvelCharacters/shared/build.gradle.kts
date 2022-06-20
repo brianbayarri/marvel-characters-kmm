@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     kotlin("plugin.serialization") version "1.6.10"
+    id("com.squareup.sqldelight")
     id("com.android.library")
 }
 
@@ -27,6 +28,7 @@ kotlin {
         val ktorVersion = "2.0.0-beta-1"
         val napierVersion = "2.6.1"
         val okioVersion = "3.1.0"
+        val sqldelightVersion = "1.5.2"
 
         val commonMain by getting {
             dependencies{
@@ -44,6 +46,9 @@ kotlin {
 
                 //OKIO
                 implementation("com.squareup.okio:okio:$okioVersion")
+
+                //SQLDELIGHT
+                implementation("com.squareup.sqldelight:runtime:$sqldelightVersion")
             }
         }
 
@@ -56,6 +61,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation("com.squareup.sqldelight:android-driver:$sqldelightVersion")
             }
         }
 
@@ -71,6 +77,7 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation("io.ktor:ktor-client-ios:$ktorVersion")
+                implementation("com.squareup.sqldelight:native-driver:$sqldelightVersion")
             }
         }
 
@@ -83,6 +90,12 @@ kotlin {
             iosArm64Test.dependsOn(this)
             iosSimulatorArm64Test.dependsOn(this)
         }
+    }
+}
+
+sqldelight {
+    database("AppDatabase") {
+        packageName = "com.characters.cache.db"
     }
 }
 

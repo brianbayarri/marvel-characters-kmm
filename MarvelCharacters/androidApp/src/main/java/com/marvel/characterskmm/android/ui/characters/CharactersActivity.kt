@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.marvel.characterskmm.android.R
 import com.marvel.characterskmm.android.databinding.ActivityCharactersBinding
 import com.marvel.characterskmm.android.domain.adapters.CharactersAdapter
+import com.marvel.characterskmm.android.domain.services.CacheService
 import com.marvel.characterskmm.android.domain.utils.VerticalSpaceItemDecoration
 import com.marvel.characterskmm.android.ui.error.ErrorActivity
 import com.marvel.characterskmm.data.Character
@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class CharactersActivity : AppCompatActivity() {
 
+    private lateinit var cacheService: CacheService
     private lateinit var charactersAdapter: CharactersAdapter
     private lateinit var binding: ActivityCharactersBinding
 
@@ -26,6 +27,9 @@ class CharactersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCharactersBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Setup cache
+        cacheService = CacheService(this)
 
         // Setup del listado
         charactersAdapter = CharactersAdapter()
@@ -43,12 +47,23 @@ class CharactersActivity : AppCompatActivity() {
                 viewModel.screenState.collect {
                     when (it) {
                         ScreenState.Loading -> showLoading()
-                        ScreenState.Error -> showErrorScreen()
+                        ScreenState.Error -> handlerError()
                         is ScreenState.ShowCharacters -> showCharacters(it.list)
                     }
                 }
             }
         }
+    }
+
+    private fun handlerError() {
+        val characters = cacheService.get()
+
+        if (characters.isEmpty()) {
+            showErrorScreen()
+        } else {
+            showCharacters(characters)
+        }
+
     }
 
     private fun showErrorScreen() {
@@ -63,5 +78,6 @@ class CharactersActivity : AppCompatActivity() {
     private fun showCharacters(list: List<Character>) {
         binding.imgSplash.visibility = View.INVISIBLE
         charactersAdapter.submitList(list)
+        cacheService.populate(list)
     }
 }

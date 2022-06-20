@@ -1,0 +1,13 @@
+CREATE TABLE Character (
+    id INTEGER NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    thumbnailUrl TEXT NOT NULL
+);
+
+--CHARACTER
+insertCharacter:
+INSERT OR REPLACE INTO Character (id, name, description, thumbnailUrl) VALUES (?,?,?,?);
+
+selectCharacters:
+SELECT * FROM Character;
