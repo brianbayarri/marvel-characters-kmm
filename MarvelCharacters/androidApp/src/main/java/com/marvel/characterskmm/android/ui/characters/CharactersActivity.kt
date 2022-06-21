@@ -9,12 +9,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.characters.cache.db.AppDatabase
+import com.marvel.characterskmm.DatabaseDriverFactory
 import com.marvel.characterskmm.android.databinding.ActivityCharactersBinding
 import com.marvel.characterskmm.android.domain.adapters.CharactersAdapter
-import com.marvel.characterskmm.android.domain.services.CacheService
 import com.marvel.characterskmm.android.domain.utils.VerticalSpaceItemDecoration
 import com.marvel.characterskmm.android.ui.error.ErrorActivity
 import com.marvel.characterskmm.data.Character
+import com.marvel.characterskmm.domain.services.CacheService
 import kotlinx.coroutines.launch
 
 class CharactersActivity : AppCompatActivity() {
@@ -29,7 +31,7 @@ class CharactersActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Setup cache
-        cacheService = CacheService(this)
+        cacheService = CacheService(AppDatabase(DatabaseDriverFactory(this).createDriver()))
 
         // Setup del listado
         charactersAdapter = CharactersAdapter()

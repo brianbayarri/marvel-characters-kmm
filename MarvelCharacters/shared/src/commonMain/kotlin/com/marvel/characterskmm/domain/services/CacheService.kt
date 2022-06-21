@@ -1,18 +1,14 @@
-package com.marvel.characterskmm.android.domain.services
+package com.marvel.characterskmm.domain.services
 
-import android.content.Context
-import android.util.Log
 import com.characters.cache.db.AppDatabase
-import com.marvel.characterskmm.DatabaseDriverFactory
 import com.marvel.characterskmm.data.Character
+import io.github.aakira.napier.Napier
 
-class CacheService(context: Context) {
-
-    var database: AppDatabase = AppDatabase(DatabaseDriverFactory(context).createDriver())
+class CacheService (private val database: AppDatabase) {
 
     fun populate(characters: List<Character>) {
         database.charactersQueries.transaction {
-            afterCommit { Log.d("Cache population", "${characters.size} characters were inserted.") }
+            afterCommit { Napier.d(tag = "Cache", message = "${characters.size} characters were inserted.") }
 
             characters.forEach{ character ->
                 database.charactersQueries.insertCharacter(
@@ -27,7 +23,7 @@ class CacheService(context: Context) {
 
     fun get() : List<Character> {
         val characters : List<Character> = database.charactersQueries.selectCharacters{
-            id, name, description, thumbnailUrl ->  Character(id, name, description, thumbnailUrl)
+                id, name, description, thumbnailUrl ->  Character(id, name, description, thumbnailUrl)
         }.executeAsList()
 
         return characters
