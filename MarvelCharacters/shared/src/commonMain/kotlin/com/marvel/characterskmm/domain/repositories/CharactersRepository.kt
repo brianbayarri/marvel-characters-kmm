@@ -1,8 +1,6 @@
 package com.marvel.characterskmm.domain.repositories
 
 import com.marvel.characterskmm.data.CharactersResponse
-import com.marvel.characterskmm.domain.PUBLIC_KEY
-import com.marvel.characterskmm.initLogger
 import io.github.aakira.napier.Napier
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -11,6 +9,8 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import com.marvel.characterskmm.BuildKonfig
+import com.marvel.characterskmm.initLogger
 
 class CharactersRepository {
 
@@ -37,7 +37,7 @@ class CharactersRepository {
     suspend fun get(timestamp: Long, md5: String) : CharactersResponse {
         return httpClient.get {
             url("https://gateway.marvel.com/v1/public/characters")
-            parameter("apikey", PUBLIC_KEY)
+            parameter("apikey", BuildKonfig.MARVEL_PUBLIC_KEY)
             parameter("ts", timestamp)
             parameter("hash", md5)
         }.body()

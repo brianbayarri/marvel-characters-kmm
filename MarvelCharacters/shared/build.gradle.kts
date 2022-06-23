@@ -4,6 +4,7 @@ plugins {
     kotlin("plugin.serialization") version "1.6.10"
     id("com.squareup.sqldelight")
     id("com.android.library")
+    id("com.codingfeline.buildkonfig")
 }
 
 version = "1.0"
@@ -105,5 +106,22 @@ android {
     defaultConfig {
         minSdk = 24
         targetSdk = 32
+    }
+}
+
+buildkonfig {
+    packageName = "com.marvel.characterskmm"
+
+    defaultConfigs {
+        buildConfigField(
+            type = com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            name = "MARVEL_PRIVATE_KEY",
+            value = project.findProperty("MARVEL_PRIVATE_KEY").toString()
+        )
+        buildConfigField(
+            type = com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING,
+            name = "MARVEL_PUBLIC_KEY",
+            value = project.findProperty("MARVEL_PUBLIC_KEY").toString()
+        )
     }
 }
