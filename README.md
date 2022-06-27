@@ -17,6 +17,7 @@ _Estas instrucciones te permitirán saber los pre-requisitos, dependencias y com
 * Napier 2.6.1
 * Okio 3.1.0
 * SqlDeLight 1.5.2
+* BuldKonfig 0.7.0
 
 #### Android
 * Material 1.4.0
